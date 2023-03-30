@@ -4,9 +4,16 @@ var apiKey = "dedbff639ecca872d98341b397686bae";
 var fiveDayTemp = document.getElementsByClassName("fiveDay-temp");
 var fiveDayHumid = document.getElementsByClassName("fiveDay-humid");
 var fiveDayWind = document.getElementsByClassName("fiveDay-wind");
+var  currentTemp = document.getElementById('temperature');
+var currentHumid = document.getElementById('humidity');
+var currentWind = document.getElementById('wind');
+var currentUV = document.getElementById('uv-index');
+
+
+
+
 
 function getApi(event) {
-  console.log("hello");
   event.preventDefault(); // fetch request gets a list of all the repos for the node.js organization
   var cityInput = cityInputEl.value;
   var requestUrl =
@@ -47,16 +54,26 @@ function getWeather(lat, lon) {
       return response.json();
     })
     .then(function (data) {
-      console.log(data);
 
       for (var i = 0; i < fiveDayTemp.length; i++) {
-        var fiveDay = fiveDayTemp[i] 
-       
-        for (var i = 0; i < data.list.length; i+=8) {
-        fiveDay.textContent = data.list[i].main.temp}
+        var temp = fiveDayTemp[i]; 
+      
+        var wind = fiveDayWind[i];
+        var humid = fiveDayHumid[i];
+        var currentDay = data.list[i*8];
+        
+        temp.textContent = currentDay.main.temp
+      wind.textContent = currentDay.wind.speed
+      humid.textContent = currentDay.main.humidity
+
+    
 
 
-          //Distribute(fiveDayTemp.item(i))
+
+        
+
+
+      
        
        
        
@@ -64,6 +81,8 @@ function getWeather(lat, lon) {
         //Distribute(fiveDayTemp.item(i));
         // (fiveDayTemp[i].textContent = )
       }
+
+
 
       // for (var i = 0; i < fiveDayHumid.length; i += 8) {
       //   Distribute(fiveDayHumid.item(i));
@@ -75,6 +94,26 @@ function getWeather(lat, lon) {
 
       
     });
+
+    var requestWeather2 = "https://api.openweathermap.org/data/2.5/weather?lat=" +  
+    lat +
+    "&lon=" +
+    lon +
+    "&appid=" +
+    apiKey;
+
+    fetch(requestWeather2)
+    .then(function (response) {
+      return response.json();
+    }).then(function (data) {
+      currentTemp.textContent = data.main.temp
+      currentHumid.textContent = data.main.humidity
+      //currentUV.textContent = figure this out if it needs an api for the weather index
+      currentWind.textContent = data.wind.speed 
+    })
+
+
+
 }
 
 //getApi()
